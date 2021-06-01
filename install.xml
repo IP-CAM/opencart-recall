@@ -1,0 +1,25 @@
+<modification>
+    <name>recall_tg</name>
+    <code>1.0</code>
+    <version>1.0.0</version>
+    <author>pro</author>
+    <link>#</link>
+    <file path="catalog/controller/common/footer.php">
+        <operation>
+        <search><![CDATA[ $data['scripts'] = $this->document->getScripts('footer'); ]]></search>
+        <add position="after">
+        <![CDATA[ if ($this->config->get('module_callback_status')) { 
+            $data['recall'] = $this->load->controller('extension/module/recall_tg');
+        } else { 
+            $data['recall'] = ''; 
+        } ]]>
+        </add>
+        </operation>
+    </file>
+    <file path="catalog/view/theme/*/template/common/footer.twig">
+            <operation>
+            <search><![CDATA[</body>]]></search>
+                <add position="before" ><![CDATA[ {{ recall }} ]]></add>
+            </operation>
+        </file>
+</modification>
