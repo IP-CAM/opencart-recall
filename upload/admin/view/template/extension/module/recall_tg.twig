@@ -1,0 +1,121 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+					<i class="fa fa-save"></i>
+				</button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+					<i class="fa fa-reply"></i>
+				</a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li>
+						<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible">
+				<i class="fa fa-exclamation-circle"></i>
+				{{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<i class="fa fa-pencil"></i>
+					{{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<ul class="header-nav-tabs nav nav-tabs">
+						<li class="active">
+							<a href="#settings" data-toggle="tab">
+								<span class="tab-icon-label">{{ text_tab_settings }}</span>
+							</a>
+						</li>
+						<li>
+							<a href="#info" data-toggle="tab">
+								<span class="tab-icon-label">{{ text_tab_help }}</span>
+							</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="settings">
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-10">
+									<select name="module_callback_status" id="input-status" class="form-control">
+										{% if module_callback_status %}
+											<option value="1" selected="selected">{{ text_enabled }}</option>
+											<option value="0">{{ text_disabled }}</option>
+										{% else %}
+											<option value="1">{{ text_enabled }}</option>
+											<option value="0" selected="selected">{{ text_disabled }}</option>
+										{% endif %}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-token">{{ entry_token }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="module_callback_token" value="{{ module_callback_token }}" placeholder="{{ entry_token }}" id="input-token" class="form-control"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="chat-id">{{ entry_chat_id }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="module_callback_chat_id" value="{{ module_callback_chat_id }}" placeholder="{{ entry_chat_id }}" id="input-chat-id" class="form-control"/>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="info">
+							<h1 id="-">О модуле:</h1>
+							<p>Это простой модуль, поторый создает форму обратного звонка, и отпраляет уведомление в telegram</p>
+							<h3 id="-">Для отправки данных в мессенджер нам понадобится следующее:</h3>
+							<ul>
+								<li>Создать бота.</li>
+								<li>Активировать бота.</li>
+								<li>Проверить правильность настройки.</li>
+							</ul>
+							<h3 id="-">Создаем телеграм-бота.</h3>
+							<p>В telegram пишем боту
+								<a href="https://t.me/botfather">@BotFather</a>
+								и даем ему команду /start, далее выбираем команду /newbot, следуем подсказкам и выбираем имя бота и как его будем вызывать. Выбранное имя может быть занято, вам сообщит об этом подсказка</p>
+							<p>После отправки имени BotFather отправит нам сообщение о том, что все готово, и пришлет специальный ключ — токен, вставляем его в поле токен.</p>
+							<p>Далее нам нужно определиться куда хотим получать заявки, либо напрямую в личку от бота либо в группу.
+								        В случае с первым вариантом, нам нужно получить наш внутренний id в телеграм, его можно получить у бота
+								<a href="https://t.me/getmyid_bot">@getmyid_bot</a>
+								Далее полученный id вставляем в поле ID чата для уведомлений.</p>
+							<p>Второй вариант</p>
+							<ul>
+								<li>Слева в меню Телеграма выбираем «Создать группу».</li>
+								<li>Пишем название группы, например «Заявки с сайта [название сайта]».</li>
+								<li>Добавляем бота в созданную группу через поиск.</li>
+								<li>Затем нужно активировать бота командой /join @youname_bot. Пишем ее в созданной группе, далее кликаем по имени бота @youname_bot, и нас перебрасывает на диалог с нашим ботом, где его нужно активировать командой /start.</li>
+							</ul>
+							<p>Теперь необходимо получить ID чата, делается это следующим запросом:</p>
+							<pre><code><span class="hljs-symbol">https:</span>//api.telegram<span class="hljs-meta">.org</span>/botXXXXXXXXXXXXXXXXXXXXXXX/getUpdates
+        </code></pre>
+							<p>Где XXXXXXXXXXXXXXXXXXXXXXX — токен вашего бота, полученный ранее.</p>
+							<p>Вставляем свой токен и переходим по ссылке, затем снова заходим в чат с нашим ботом и повторно активируем его командой /start, обновляем ссылку и ищем ID чата, он будет выглядеть следующим образом:</p>
+							<p><img src="https://i.imgur.com/fWMv1RD.png" alt="img"></p>
+							<p>Если вам понравился модуль вы можете отблагодарить автора:</p>
+								<p><a href="https://yoomoney.ru/to/410015628334909">YooMoney</a></p>
+								<p>btc - bc1q7z09qh6d2f6umt2uxlg7wtzjzr3hgdgfwl7mne</p>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}
