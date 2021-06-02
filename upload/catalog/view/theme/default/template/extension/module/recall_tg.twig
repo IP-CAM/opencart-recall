@@ -26,7 +26,7 @@ $(document).ready(function () {
         type: 'post',
         data: 'phone=' + phone + '&route=' + window.location,
             success: function (data) { 
-                $("#calbback-form").html(' <div class="success-send"><img src="/catalog/view/theme/default/image/checked.svg"> <br> '+ {{ text_success }} + '</div>');
+                $("#calbback-form").html(' <div class="success-send"><img src="/catalog/view/theme/default/image/checked.svg"> <br> {{ text_success }}</div>');
             },
             error: function (jqXHR, text, error) {
                 $("#calbback-form").html(error);        
@@ -143,6 +143,7 @@ $(document).ready(function () {
 	bottom: 110px;
 	position: fixed;
 	box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
 }
 .callback.callback-form-open .callback-form {
 	display: block;
